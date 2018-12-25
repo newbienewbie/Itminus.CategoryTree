@@ -1,0 +1,36 @@
+﻿
+@using Itminus.CategoryTree;
+@* actually, the model is @model CategoryTreeViewModel<Category>*@  
+@**    ... but the Razor doesn't support CategoryTreeViewModel<TCategory> *@
+@model dynamic
+
+<ul class="itminus-category-tree">
+    @{ 
+        var trees = Model.Trees;
+        var activeCssClass = Model.ActiveCssClass;
+        var convertCategoryToHref = Model.ConvertCategoryToHref;
+
+    }
+    @if (Model.Trees != null) {
+        @for (var i = 0; i < Model.Trees.Count; i++)
+        {
+            var treeNode = Model.Trees[i];
+            <li key='@treeNode.Value.Id' data='@treeNode.Value.Id'>
+                <a class="@activeCssClass" href="@convertCategoryToHref(treeNode.Value)">
+                    @treeNode.Value.Name
+                </a>
+                @{
+                    var children = treeNode.Children;
+                    if(children != null && children.Count>0){
+                        @await Component.InvokeAsync("CategoryTree", new CategoryTreeViewModel<Category> {
+                            Trees= children ,
+                            ActiveCssClass = activeCssClass,
+                            ConvertCategoryToHref = convertCategoryToHref,
+                        });
+                    }
+                }
+            </li>
+        }
+    }
+
+</ul>
