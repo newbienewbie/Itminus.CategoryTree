@@ -21,6 +21,11 @@ namespace Itminus.CategoryTree
         public Func<TCategory, string> ConvertCategoryToHref { get; set; } = c => c.Id.ToString();
 
         /// <summary>
+        /// current selected TCategory that can be used to stylish current selected node
+        /// </summary>
+        public TCategory Current { get; set; }
+
+        /// <summary>
         /// css class name for active node (e.g. when hover)
         /// </summary>
         public string ActiveCssClass { get; set; }

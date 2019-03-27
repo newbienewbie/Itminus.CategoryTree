@@ -9,14 +9,21 @@
         var trees = Model.Trees;
         var activeCssClass = Model.ActiveCssClass;
         var convertCategoryToHref = Model.ConvertCategoryToHref;
+        Func<dynamic, string> CalcCssClassForCurrent = (node) => {
+            var currentCategory = Model.Current;
+            var nodeSelected = currentCategory == null ?
+                false :
+                node.Value.Id == currentCategory.Id ;
 
+            return nodeSelected ? "selected" : "";
+        };
     }
     @if (Model.Trees != null) {
         @for (var i = 0; i < Model.Trees.Count; i++)
         {
             var treeNode = Model.Trees[i];
             <li key='@treeNode.Value.Id' data='@treeNode.Value.Id'>
-                <a class="@activeCssClass" href="@convertCategoryToHref(treeNode.Value)">
+                <a class="@activeCssClass @CalcCssClassForCurrent(treeNode)" href="@convertCategoryToHref(treeNode.Value)">
                     @treeNode.Value.Name
                 </a>
                 @{
@@ -26,6 +33,7 @@
                             Trees= children ,
                             ActiveCssClass = activeCssClass,
                             ConvertCategoryToHref = convertCategoryToHref,
+                            Current = Model.Current,
                         });
                     }
                 }
